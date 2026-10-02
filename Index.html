@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EduNexus AI</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
+body{background:#f4f6fb;color:#222}
+button{cursor:pointer;border:0;border-radius:8px;padding:10px 15px;background:#4f46e5;color:white;font-weight:bold}
+input{padding:11px;border:1px solid #ddd;border-radius:8px;width:100%}
+
+/* LOGIN */
+#login{
+height:100vh;display:flex;align-items:center;justify-content:center;
+background:linear-gradient(135deg,#4f46e5,#9333ea)
+}
+.loginbox{
+background:white;width:90%;max-width:380px;padding:30px;border-radius:18px;
+text-align:center;box-shadow:0 10px 30px #0003
+}
+.logo{
+width:65px;height:65px;background:#4f46e5;color:white;border-radius:15px;
+display:flex;align-items:center;justify-content:center;margin:auto;font-size:30px;font-weight:bold
+}
+.loginbox h1{margin:15px 0 5px;color:#312e81}
+.loginbox p{color:#777;margin-bottom:20px}
+.loginbox input{margin-bottom:12px}
+
+/* APP */
+#app{display:none}
+.side{
+position:fixed;width:230px;height:100vh;background:#111827;color:white;padding:18px;
+overflow:auto
+}
+.brand{font-size:20px;font-weight:bold;margin-bottom:25px;color:white}
+.nav{
+width:100%;background:none;color:#ddd;text-align:left;margin:3px 0
+}
+.nav:hover,.nav.active{background:#4f46e5;color:white}
+.main{margin-left:230px}
+.top{
+height:65px;background:white;padding:20px 25px;display:flex;
+justify-content:space-between;border-bottom:1px solid #ddd
+}
+.content{padding:25px}
+.screen{display:none}
+.screen.active{display:block}
+h1{margin-bottom:8px}
+.sub{color:#777;margin-bottom:20px}
+
+/* CARDS */
+.cards{
+display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px
+}
+.card{
+background:white;padding:20px;border-radius:14px;
+box-shadow:0 2px 10px #0001;margin-bottom:15px
+}
+.num{font-size:30px;color:#4f46e5;font-weight:bold;margin:8px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+
+/* PROFILE */
+.info{
+display:grid;grid-template-columns:1fr 1fr;gap:12px
+}
+.info div{background:#f5f6fa;padding:15px;border-radius:8px}
+
+/* CAREER */
+.career{
+background:white;padding:20px;border-radius:14px;margin-bottom:15px
+}
+.match{float:right;background:#dcfce7;color:#15803d;padding:7px;border-radius:15px}
+.tag{
+display:inline-block;background:#eef2ff;color:#4338ca;padding:6px 10px;
+border-radius:15px;margin:4px
+}
+
+/* PROGRESS */
+.bar{height:10px;background:#ddd;border-radius:10px;margin:8px 0 18px}
+.fill{height:100%;background:#4f46e5;border-radius:10px}
+
+/* CHAT */
+.chat{
+height:500px;background:white;border-radius:15px;
+display:flex;flex-direction:column
+}
+.chatbody{flex:1;padding:15px;overflow:auto;background:#f8f8f8}
+.msg{padding:10px 14px;border-radius:10px;margin:8px;max-width:75%}
+.bot{background:#ddd}
+.me{background:#4f46e5;color:white;margin-left:auto}
+.chatinput{display:flex;gap:8px;padding:12px}
+.chatinput input{flex:1}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;background:white}
+th,td{padding:12px;border-bottom:1px solid #ddd;text-align:left}
+th{background:#f3f4f6}
+
+/* MOBILE */
+@media(max-width:800px){
+.side{width:190px}
+.main{margin-left:190px}
+.cards{grid-template-columns:1fr 1fr}
+.grid,.info{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+.side{position:relative;width:100%;height:auto}
+.main{margin-left:0}
+.cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+<div class="loginbox">
+<div class="logo">E</div>
+<h1>EduNexus AI</h1>
+<p>Intelligent Student Career & Welfare Platform</p>
+
+<input id="email" type="email" placeholder="Email">
+<br><br>
+<input id="password" type="password" placeholder="Password">
+<br><br>
+
+<button id="loginBtn" style="width:100%">Login</button>
+</div>
+</div>
+
+
+<!-- APP -->
+<div id="app">
+
+<!-- SIDEBAR -->
+<div class="side">
+
+<div class="brand">🎓 EduNexus AI</div>
+
+<button class="nav active" data-page="dashboard">🏠 Dashboard</button>
+<button class="nav" data-page="profile">👤 Profile</button>
+<button class="nav" data-page="career">🎯 Career Recommendation</button>
+<button class="nav" data-page="skill">📊 Skill Gap</button>
+<button class="nav" data-page="learning">📚 Learning Roadmap</button>
+<button class="nav" data-page="resume">📄 Resume Analysis</button>
+<button class="nav" data-page="scholarship">🎓 Scholarship / Welfare</button>
+<button class="nav" data-page="internship">💼 Internship</button>
+<button class="nav" data-page="placement">🏢 Placement</button>
+<button class="nav" data-page="chatbot">🤖 AI Chatbot</button>
+<button class="nav" data-page="modules">👥 Module Allocation</button>
+
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="top">
+<b id="title">Student Dashboard</b>
+<span>👤 Adhiga</span>
+</div>
+
+<div class="content">
+
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="screen active">
+
+<h1>Welcome to EduNexus AI 👋</h1>
+<p class="sub">Your intelligent student career and welfare platform.</p>
+
+<div class="cards">
+
+<div class="card">
+<h3>Career Match</h3>
+<div class="num">87%</div>
+<p>Career profile match</p>
+</div>
+
+<div class="card">
+<h3>Skills</h3>
+<div class="num">12</div>
+<p>Skills added</p>
+</div>
+
+<div class="card">
+<h3>Learning</h3>
+<div class="num">65%</div>
+<p>Roadmap progress</p>
+</div>
+
+<div class="card">
+<h3>Opportunities</h3>
+<div class="num">18</div>
+<p>Relevant opportunities</p>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>Recommended Career</h2><br>
+<h3>Full Stack Developer</h3>
+<p>Based on your skills and interests.</p><br>
+<button data-go="career">View Career</button>
+</div>
+
+<div class="card">
+<h2>AI Assistance</h2><br>
+<p>Ask about careers, skills, scholarships, internships and placements.</p><br>
+<button data-go="chatbot">Open Chatbot</button>
+</div>
+
+</div>
+</section>
+
+
+<!-- PROFILE -->
+<section id="profile" class="screen">
+
+<h1>Student Profile</h1>
+<p class="sub">Manage your academic and personal information.</p>
+
+<div class="card">
+
+<h2>Adhiga</h2><br>
+
+<div class="info">
+<div><b>Name</b><br>Adhiga</div>
+<div><b>Department</b><br>Computer Science and Engineering</div>
+<div><b>Year</b><br>Final Year</div>
+<div><b>Email</b><br>student@example.com</div>
+<div><b>Skills</b><br>HTML, CSS, JavaScript, Python</div>
+<div><b>Interests</b><br>Web Development, AI</div>
+</div>
+
+<br>
+<button>Edit Profile</button>
+
+</div>
+</section>
+
+
+<!-- CAREER -->
+<section id="career" class="screen">
+
+<h1>Career Recommendation</h1>
+<p class="sub">AI-based personalized career suggestions.</p>
+
+<div class="career">
+
+<span class="match">92% Match</span>
+<h2>Full Stack Developer</h2>
+<p>Recommended based on your skills and interests.</p>
+<br>
+
+<b>Required Skills</b><br>
+<span class="tag">HTML</span>
+<span class="tag">CSS</span>
+<span class="tag">JavaScript</span>
+<span class="tag">React</span>
+<span class="tag">Node.js</span>
+
+<br><br>
+<button>View Career Path</button>
+</div>
+
+<div class="career">
+<span class="match">84% Match</span>
+<h2>Software Developer</h2>
+<p>Suitable based on your programming background.</p>
+</div>
+
+<div class="career">
+<span class="match">78% Match</span>
+<h2>AI / ML Developer</h2>
+<p>Suggested based on your interest in AI.</p>
+</div>
+
+</section>
+
+
+<!-- SKILL -->
+<section id="skill" class="screen">
+
+<h1>Skill-Gap Analysis</h1>
+<p class="sub">Compare current skills with required career skills.</p>
+
+<div class="cards">
+
+<div class="card"><h3>Target Career</h3><div class="num">Full Stack</div></div>
+<div class="card"><h3>Overall Match</h3><div class="num">72%</div></div>
+<div class="card"><h3>Current Skills</h3><div class="num">7</div></div>
+<div class="card"><h3>Skills Needed</h3><div class="num">10</div></div>
+
+</div>
+
+<div class="card">
+
+<h2>Current Skills</h2><br>
+
+<p>HTML - 90%</p>
+<div class="bar"><div class="fill" style="width:90%"></div></div>
+
+<p>CSS - 80%</p>
+<div class="bar"><div class="fill" style="width:80%"></div></div>
+
+<p>JavaScript - 65%</p>
+<div class="bar"><div class="fill" style="width:65%"></div></div>
+
+<p>React - 40%</p>
+<div class="bar"><div class="fill" style="width:40%"></div></div>
+
+<p>Node.js - 30%</p>
+<div class="bar"><div class="fill" style="width:30%"></div></div>
+
+<button data-go="learning">Go to Learning Roadmap</button>
+
+</div>
+</section>
+
+
+<!-- LEARNING -->
+<section id="learning" class="screen">
+
+<h1>Learning Roadmap</h1>
+<p class="sub">Personalized roadmap for Full Stack Development.</p>
+
+<div class="card">
+<h2>Step 1 - HTML & CSS</h2>
+<p>Learn webpage structure, styling and responsive design.</p>
+<br><button>In Progress</button>
+</div>
+
+<div class="card">
+<h2>Step 2 - JavaScript</h2>
+<p>Learn variables, functions, DOM and events.</p>
+<br><button>In Progress</button>
+</div>
+
+<div class="card">
+<h2>Step 3 - React.js</h2>
+<p>Learn components, props, state and hooks.</p>
+<br><button>Planned</button>
+</div>
+
+<div class="card">
+<h2>Step 4 - Node.js & Express</h2>
+<p>Learn backend development and REST APIs.</p>
+<br><button>Planned</button>
+</div>
+
+<div class="card">
+<h2>Step 5 - MongoDB</h2>
+<p>Learn database and CRUD operations.</p>
+<br><button>Planned</button>
+</div>
+
+</section>
+
+
+<!-- RESUME -->
+<section id="resume" class="screen">
+
+<h1>Resume Analysis</h1>
+<p class="sub">AI-based resume improvement.</p>
+
+<div class="card">
+<h2>Upload Resume</h2><br>
+<input type="file">
+<br><br>
+<button>Analyze Resume</button>
+</div>
+
+<div class="cards">
+
+<div class="card">
+<h3>Resume Score</h3>
+<div class="num">82</div>
+</div>
+
+<div class="card">
+<h3>Strengths</h3>
+<p>Good technical skills and project section.</p>
+</div>
+
+<div class="card">
+<h3>Improvements</h3>
+<p>Improve summary and project descriptions.</p>
+</div>
+
+<div class="card">
+<h3>AI Suggestion</h3>
+<p>Add relevant job keywords.</p>
+</div>
+
+</div>
+</section>
+
+
+<!-- SCHOLARSHIP -->
+<section id="scholarship" class="screen">
+
+<h1>Scholarship / Welfare</h1>
+<p class="sub">Find schemes based on student eligibility.</p>
+
+<div class="cards">
+
+<div class="card"><h3>Eligible Schemes</h3><div class="num">6</div></div>
+<div class="card"><h3>New Schemes</h3><div class="num">3</div></div>
+<div class="card"><h3>Deadlines</h3><div class="num">4</div></div>
+<div class="card"><h3>Saved</h3><div class="num">2</div></div>
+
+</div>
+
+<div class="card">
+<h2>Government Scholarship</h2>
+<p>Student Welfare Scheme</p>
+<p>Eligibility: Based on academic and category criteria.</p>
+<p>Deadline: 30 October 2026</p>
+<br>
+<button>View Details</button>
+</div>
+
+<div class="card">
+<h2>Education Support Scheme</h2>
+<p>Financial assistance for eligible students.</p>
+<br>
+<button>View Details</button>
+</div>
+
+</section>
+
+
+<!-- INTERNSHIP -->
+<section id="internship" class="screen">
+
+<h1>Internship Opportunities</h1>
+<p class="sub">Find internships based on your skills.</p>
+
+<div class="card">
+<h2>Frontend Developer Intern</h2>
+<h3>Tech Solutions</h3>
+<p>Location: Chennai / Remote</p>
+<p>Duration: 3 Months</p>
+<p>Skills: HTML, CSS, JavaScript, React</p>
+<br>
+<button>Apply</button>
+</div>
+
+<div class="card">
+<h2>Web Development Intern</h2>
+<h3>Digital Works</h3>
+<p>Location: Trichy</p>
+<p>Duration: 2 Months</p>
+<p>Skills: HTML, CSS, JavaScript</p>
+<br>
+<button>Apply</button>
+</div>
+
+</section>
+
+
+<!-- PLACEMENT -->
+<section id="placement" class="screen">
+
+<h1>Placement</h1>
+<p class="sub">Explore job opportunities and placement drives.</p>
+
+<div class="cards">
+
+<div class="card"><h3>Available Jobs</h3><div class="num">12</div></div>
+<div class="card"><h3>Applied</h3><div class="num">4</div></div>
+<div class="card"><h3>Shortlisted</h3><div class="num">2</div></div>
+<div class="card"><h3>Drives</h3><div class="num">3</div></div>
+
+</div>
+
+<div class="card">
+<h2>Junior Full Stack Developer</h2>
+<h3>ABC Technologies</h3>
+<p>Location: Chennai</p>
+<p>Package: 4 - 6 LPA</p>
+<p>Skills: React, Node.js, MongoDB</p>
+<br>
+<button>Apply Now</button>
+</div>
+
+<div class="card">
+<h2>Software Developer</h2>
+<h3>XYZ Software</h3>
+<p>Location: Bangalore</p>
+<p>Package: 5 - 7 LPA</p>
+<p>Skills: Java, SQL, Problem Solving</p>
+<br>
+<button>Apply Now</button>
+</div>
+
+</section>
+
+
+<!-- CHATBOT -->
+<section id="chatbot" class="screen">
+
+<h1>AI Chatbot</h1>
+<p class="sub">Ask about careers, skills, scholarships and placements.</p>
+
+<div class="chat">
+
+<div class="chatbody" id="chatbody">
+
+<div class="msg bot">
+Hello! 👋 I am EduNexus AI Assistant.
+</div>
+
+<div class="msg bot">
+Ask me about careers, skills, scholarships, internships or placements.
+</div>
+
+</div>
+
+<div class="chatinput">
+<input id="chatinput" placeholder="Type your question...">
+<button id="send">Send</button>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- MODULES -->
+<section id="modules" class="screen">
+
+<h1>Module Allocation</h1>
+<p class="sub">Responsibilities divided among three team members.</p>
+
+<div class="card">
+
+<h2>Member 1</h2><br>
+
+<table>
+<tr><th>Module</th><th>Responsibility</th><th>Status</th></tr>
+<tr><td>Profile & Dashboard</td><td>UI and profile planning</td><td>In Progress</td></tr>
+<tr><td>Career Recommendation</td><td>Career flow and UI</td><td>In Progress</td></tr>
+<tr><td>Internship / Placement</td><td>Opportunity flow</td><td>Planned</td></tr>
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Member 2</h2><br>
+
+<table>
+<tr><th>Module</th><th>Responsibility</th><th>Status</th></tr>
+<tr><td>Skill-Gap Analysis</td><td>Skill analysis and screen</td><td>In Progress</td></tr>
+<tr><td>Learning Roadmap</td><td>Learning recommendation</td><td>In Progress</td></tr>
+<tr><td>AI Chatbot</td><td>Chatbot and LLM planning</td><td>Planned</td></tr>
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>Member 3</h2><br>
+
+<table>
+<tr><th>Module</th><th>Responsibility</th><th>Status</th></tr>
+<tr><td>Resume Analysis</td><td>Resume feature planning</td><td>In Progress</td></tr>
+<tr><td>Scholarship / Welfare</td><td>Eligibility and schemes</td><td>In Progress</td></tr>
+</table>
+
+</div>
+
+<div class="card">
+
+<h2>All Members</h2><br>
+
+<table>
+<tr><th>Module</th><th>Responsibility</th><th>Status</th></tr>
+<tr><td>System Integration</td><td>Connect all modules</td><td>Planned</td></tr>
+</table>
+
+</div>
+
+</section>
+
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+/* LOGIN */
+
+document.getElementById("loginBtn").addEventListener("click",function(){
+
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="block";
+
+show("dashboard");
+
+});
+
+
+/* SIDEBAR */
+
+document.querySelectorAll(".nav").forEach(function(btn){
+
+btn.addEventListener("click",function(){
+
+show(btn.dataset.page);
+
+});
+
+});
+
+
+/* INTERNAL BUTTONS */
+
+document.querySelectorAll("[data-go]").forEach(function(btn){
+
+btn.addEventListener("click",function(){
+
+show(btn.dataset.go);
+
+});
+
+});
+
+
+/* SHOW PAGE */
+
+function show(page){
+
+document.querySelectorAll(".screen").forEach(function(s){
+s.classList.remove("active");
+});
+
+document.getElementById(page).classList.add("active");
+
+document.querySelectorAll(".nav").forEach(function(n){
+n.classList.remove("active");
+
+if(n.dataset.page==page){
+n.classList.add("active");
+}
+});
+
+let names={
+dashboard:"Student Dashboard",
+profile:"Student Profile",
+career:"Career Recommendation",
+skill:"Skill-Gap Analysis",
+learning:"Learning Roadmap",
+resume:"Resume Analysis",
+scholarship:"Scholarship / Welfare",
+internship:"Internship Opportunities",
+placement:"Placement",
+chatbot:"AI Chatbot",
+modules:"Module Allocation"
+};
+
+document.getElementById("title").innerText=names[page];
+
+}
+
+
+/* CHATBOT */
+
+document.getElementById("send").addEventListener("click",chat);
+
+document.getElementById("chatinput").addEventListener("keypress",function(e){
+
+if(e.key=="Enter") chat();
+
+});
+
+
+function chat(){
+
+let input=document.getElementById("chatinput");
+let text=input.value.trim();
+
+if(text=="") return;
+
+let body=document.getElementById("chatbody");
+
+body.innerHTML+=
+'<div class="msg me">'+text+'</div>';
+
+let answer="I can help you with careers, skills, scholarships, internships, placements and resume analysis.";
+
+let x=text.toLowerCase();
+
+if(x.includes("career"))
+answer="Full Stack Developer is one of the recommended career paths. Check the Career Recommendation page.";
+
+else if(x.includes("skill"))
+answer="For Full Stack Development, learn HTML, CSS, JavaScript, React, Node.js and MongoDB.";
+
+else if(x.includes("resume"))
+answer="You can use the Resume Analysis section to check resume strengths and improvements.";
+
+else if(x.includes("scholarship"))
+answer="Check the Scholarship / Welfare section for available schemes and eligibility.";
+
+else if(x.includes("internship"))
+answer="You can find relevant internship opportunities in the Internship section.";
+
+else if(x.includes("placement"))
+answer="The Placement section shows job opportunities and placement information.";
+
+setTimeout(function(){
+
+body.innerHTML+=
+'<div class="msg bot">'+answer+'</div>';
+
+body.scrollTop=body.scrollHeight;
+
+},400);
+
+input.value="";
+
+}
+
+</script>
+
+</body>
+</html>
